@@ -6,6 +6,10 @@
     <tool name="Pin">
       <a name="appearance" val="classic"/>
     </tool>
+    <tool name="Constant">
+      <a name="value" val="0x0"/>
+      <a name="width" val="3"/>
+    </tool>
   </lib>
   <lib desc="#Gates" name="1"/>
   <lib desc="#Plexers" name="2"/>
@@ -59,6 +63,7 @@
     <comp lib="0" loc="(110,200)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="south"/>
+      <a name="label" val="cnd"/>
       <a name="output" val="true"/>
     </comp>
     <comp lib="0" loc="(130,860)" name="Pin">
@@ -83,14 +88,8 @@
     <comp lib="0" loc="(610,190)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="south"/>
+      <a name="label" val="valE"/>
       <a name="output" val="true"/>
-      <a name="radix" val="16"/>
-      <a name="width" val="64"/>
-    </comp>
-    <comp lib="0" loc="(630,870)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="facing" val="north"/>
-      <a name="label" val="valC"/>
       <a name="radix" val="16"/>
       <a name="width" val="64"/>
     </comp>
@@ -100,6 +99,18 @@
       <a name="label" val="valB"/>
       <a name="radix" val="16"/>
       <a name="width" val="64"/>
+    </comp>
+    <comp lib="0" loc="(800,870)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="north"/>
+      <a name="label" val="valC"/>
+      <a name="radix" val="16"/>
+      <a name="width" val="64"/>
+    </comp>
+    <comp lib="0" loc="(910,870)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="north"/>
+      <a name="label" val="clk"/>
     </comp>
     <comp loc="(110,200)" name="cond">
       <a name="facing" val="north"/>
@@ -138,26 +149,30 @@
     <wire from="(380,440)" to="(380,460)"/>
     <wire from="(380,680)" to="(380,770)"/>
     <wire from="(380,770)" to="(630,770)"/>
+    <wire from="(400,440)" to="(490,440)"/>
     <wire from="(450,210)" to="(450,450)"/>
     <wire from="(450,210)" to="(590,210)"/>
+    <wire from="(490,440)" to="(490,820)"/>
+    <wire from="(490,820)" to="(910,820)"/>
     <wire from="(590,430)" to="(590,450)"/>
     <wire from="(590,670)" to="(590,870)"/>
     <wire from="(610,190)" to="(610,210)"/>
     <wire from="(610,430)" to="(610,450)"/>
     <wire from="(610,450)" to="(700,450)"/>
     <wire from="(610,670)" to="(610,860)"/>
-    <wire from="(610,860)" to="(630,860)"/>
+    <wire from="(610,860)" to="(800,860)"/>
     <wire from="(630,430)" to="(750,430)"/>
     <wire from="(630,670)" to="(630,770)"/>
     <wire from="(630,770)" to="(720,770)"/>
-    <wire from="(630,860)" to="(630,870)"/>
     <wire from="(700,670)" to="(700,870)"/>
     <wire from="(720,670)" to="(720,770)"/>
     <wire from="(720,770)" to="(840,770)"/>
     <wire from="(750,330)" to="(750,430)"/>
     <wire from="(750,330)" to="(820,330)"/>
+    <wire from="(800,860)" to="(800,870)"/>
     <wire from="(820,550)" to="(820,780)"/>
     <wire from="(840,550)" to="(840,770)"/>
+    <wire from="(910,820)" to="(910,870)"/>
   </circuit>
   <circuit name="setCC">
     <a name="appearance" val="logisim_evolution"/>
@@ -388,7 +403,10 @@
       <a name="appearance" val="NewPins"/>
       <a name="label" val="setCC"/>
     </comp>
-    <comp lib="0" loc="(250,250)" name="Clock"/>
+    <comp lib="0" loc="(250,250)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="clk"/>
+    </comp>
     <comp lib="0" loc="(400,210)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>

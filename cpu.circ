@@ -22,6 +22,7 @@
   <lib desc="#BFH-Praktika" name="9"/>
   <lib desc="#Input/Output-Extra" name="10"/>
   <lib desc="#Soc" name="11"/>
+  <lib desc="file#execution.circ" name="12"/>
   <main name="main"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
@@ -61,17 +62,49 @@
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="8.0"/>
     <comp lib="0" loc="(90,460)" name="Clock"/>
+    <comp lib="12" loc="(1210,260)" name="execute_main"/>
     <comp loc="(430,260)" name="fetch"/>
     <comp loc="(780,260)" name="decode_and_write_back"/>
+    <wire from="(1210,260)" to="(1240,260)"/>
+    <wire from="(1210,280)" to="(1260,280)"/>
+    <wire from="(1240,260)" to="(1240,530)"/>
+    <wire from="(1260,180)" to="(1260,280)"/>
     <wire from="(210,280)" to="(210,460)"/>
     <wire from="(210,460)" to="(560,460)"/>
     <wire from="(430,260)" to="(500,260)"/>
+    <wire from="(430,280)" to="(440,280)"/>
     <wire from="(430,300)" to="(560,300)"/>
     <wire from="(430,320)" to="(560,320)"/>
+    <wire from="(430,340)" to="(520,340)"/>
+    <wire from="(440,240)" to="(440,280)"/>
+    <wire from="(440,240)" to="(960,240)"/>
+    <wire from="(500,220)" to="(500,260)"/>
+    <wire from="(500,220)" to="(990,220)"/>
     <wire from="(500,260)" to="(500,280)"/>
     <wire from="(500,280)" to="(560,280)"/>
+    <wire from="(520,340)" to="(520,470)"/>
+    <wire from="(520,470)" to="(980,470)"/>
+    <wire from="(540,340)" to="(540,530)"/>
+    <wire from="(540,340)" to="(560,340)"/>
+    <wire from="(540,530)" to="(1240,530)"/>
+    <wire from="(560,180)" to="(1260,180)"/>
+    <wire from="(560,180)" to="(560,260)"/>
     <wire from="(560,380)" to="(560,460)"/>
+    <wire from="(560,460)" to="(990,460)"/>
+    <wire from="(780,260)" to="(940,260)"/>
+    <wire from="(780,280)" to="(920,280)"/>
     <wire from="(90,460)" to="(210,460)"/>
+    <wire from="(920,280)" to="(920,320)"/>
+    <wire from="(920,320)" to="(990,320)"/>
+    <wire from="(940,260)" to="(940,300)"/>
+    <wire from="(940,300)" to="(990,300)"/>
+    <wire from="(960,240)" to="(960,280)"/>
+    <wire from="(960,280)" to="(990,280)"/>
+    <wire from="(980,340)" to="(980,470)"/>
+    <wire from="(980,340)" to="(990,340)"/>
+    <wire from="(990,220)" to="(990,260)"/>
+    <wire from="(990,280)" to="(1000,280)"/>
+    <wire from="(990,360)" to="(990,460)"/>
   </circuit>
   <circuit name="fetch">
     <a name="appearance" val="logisim_evolution"/>
@@ -2252,11 +2285,5 @@
     <wire from="(980,130)" to="(980,630)"/>
     <wire from="(990,140)" to="(1080,140)"/>
     <wire from="(990,140)" to="(990,740)"/>
-  </circuit>
-  <circuit name="execute">
-    <a name="appearance" val="logisim_evolution"/>
-    <a name="circuit" val="execute"/>
-    <a name="circuitnamedboxfixedsize" val="true"/>
-    <a name="simulationFrequency" val="8.0"/>
   </circuit>
 </project>
