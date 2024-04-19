@@ -2286,4 +2286,13 @@
     <wire from="(990,140)" to="(1080,140)"/>
     <wire from="(990,140)" to="(990,740)"/>
   </circuit>
+  <circuit name="memory">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="memory"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="8.0"/>
+    <comp lib="4" loc="(640,280)" name="RAM">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+  </circuit>
 </project>

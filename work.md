@@ -66,3 +66,20 @@ popq rA | B | 0x4 | 0x4 | 0x4 | rA |
 | cmovXX rA, rB | 2 | fn |
 | pushq rA | A | 0 |
 | popq rA | B | 0 |
+
+## memory
+| instruction | Mem. read (1: read) | Mem. write (1: write) | Mem. addr (valE/valA) | Mem. Data (valA/valP) |
+| --- | --- | --- | --- | --- |
+| halt | 0 | 0 |
+| nop | 0 | 0 |
+| rrmovq rA, rB | 0 | 0 |
+| irmovq V, rB | 0 | 0 |
+| rmmovq rA, D(rB) | 0 | 1 | valE | valA |
+| mrmovq D(rB), rA | 1 | 0 | valE | X |
+| OPq rA, rB | 0 | 0 |
+| jXX Dest | 0 | 0 |
+| cmovXX rA, rB | 0 | 0 |
+| pushq rA | 0
+| popq rA | 
+
+## pc update
