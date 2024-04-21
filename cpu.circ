@@ -23,6 +23,7 @@
   <lib desc="#Input/Output-Extra" name="10"/>
   <lib desc="#Soc" name="11"/>
   <lib desc="file#execution.circ" name="12"/>
+  <lib desc="file#pc_update.circ" name="13"/>
   <main name="main"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
@@ -63,8 +64,9 @@
     <a name="simulationFrequency" val="8.0"/>
     <comp lib="0" loc="(90,460)" name="Clock"/>
     <comp lib="12" loc="(1210,260)" name="execute_main"/>
+    <comp lib="13" loc="(1640,270)" name="pc_update"/>
     <comp loc="(430,260)" name="fetch"/>
-    <comp loc="(780,260)" name="decode_and_write_back"/>
+    <comp loc="(800,260)" name="decode_and_write_back"/>
     <wire from="(1210,260)" to="(1240,260)"/>
     <wire from="(1210,280)" to="(1260,280)"/>
     <wire from="(1240,260)" to="(1240,530)"/>
@@ -73,26 +75,28 @@
     <wire from="(210,460)" to="(560,460)"/>
     <wire from="(430,260)" to="(500,260)"/>
     <wire from="(430,280)" to="(440,280)"/>
-    <wire from="(430,300)" to="(560,300)"/>
-    <wire from="(430,320)" to="(560,320)"/>
+    <wire from="(430,300)" to="(580,300)"/>
+    <wire from="(430,320)" to="(580,320)"/>
     <wire from="(430,340)" to="(520,340)"/>
     <wire from="(440,240)" to="(440,280)"/>
     <wire from="(440,240)" to="(960,240)"/>
     <wire from="(500,220)" to="(500,260)"/>
     <wire from="(500,220)" to="(990,220)"/>
     <wire from="(500,260)" to="(500,280)"/>
-    <wire from="(500,280)" to="(560,280)"/>
+    <wire from="(500,280)" to="(580,280)"/>
     <wire from="(520,340)" to="(520,470)"/>
     <wire from="(520,470)" to="(980,470)"/>
     <wire from="(540,340)" to="(540,530)"/>
-    <wire from="(540,340)" to="(560,340)"/>
+    <wire from="(540,340)" to="(580,340)"/>
     <wire from="(540,530)" to="(1240,530)"/>
     <wire from="(560,180)" to="(1260,180)"/>
     <wire from="(560,180)" to="(560,260)"/>
+    <wire from="(560,260)" to="(580,260)"/>
     <wire from="(560,380)" to="(560,460)"/>
+    <wire from="(560,380)" to="(580,380)"/>
     <wire from="(560,460)" to="(990,460)"/>
-    <wire from="(780,260)" to="(940,260)"/>
-    <wire from="(780,280)" to="(920,280)"/>
+    <wire from="(800,260)" to="(940,260)"/>
+    <wire from="(800,280)" to="(920,280)"/>
     <wire from="(90,460)" to="(210,460)"/>
     <wire from="(920,280)" to="(920,320)"/>
     <wire from="(920,320)" to="(990,320)"/>
@@ -2291,8 +2295,86 @@
     <a name="circuit" val="memory"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="8.0"/>
-    <comp lib="4" loc="(640,280)" name="RAM">
+    <comp lib="0" loc="(240,200)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="icode"/>
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="0" loc="(320,470)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="valE"/>
+      <a name="radix" val="16"/>
+      <a name="width" val="64"/>
+    </comp>
+    <comp lib="0" loc="(320,520)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="valA"/>
+      <a name="radix" val="16"/>
+      <a name="width" val="64"/>
+    </comp>
+    <comp lib="0" loc="(320,570)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="valP"/>
+      <a name="radix" val="16"/>
+      <a name="width" val="64"/>
+    </comp>
+    <comp lib="0" loc="(440,220)" name="Constant">
+      <a name="value" val="0x4"/>
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="0" loc="(440,260)" name="Constant">
+      <a name="value" val="0xa"/>
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="0" loc="(440,310)" name="Constant">
+      <a name="value" val="0x5"/>
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="0" loc="(440,350)" name="Constant">
+      <a name="value" val="0xb"/>
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="1" loc="(530,230)" name="OR Gate">
+      <a name="size" val="30"/>
+    </comp>
+    <comp lib="1" loc="(530,320)" name="OR Gate">
+      <a name="size" val="30"/>
+    </comp>
+    <comp lib="2" loc="(590,580)" name="Multiplexer"/>
+    <comp lib="3" loc="(480,210)" name="Comparator">
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="3" loc="(480,250)" name="Comparator">
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="3" loc="(480,300)" name="Comparator">
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="3" loc="(480,340)" name="Comparator">
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="4" loc="(990,270)" name="RAM">
       <a name="appearance" val="logisim_evolution"/>
     </comp>
+    <wire from="(240,200)" to="(430,200)"/>
+    <wire from="(430,200)" to="(430,240)"/>
+    <wire from="(430,200)" to="(440,200)"/>
+    <wire from="(430,240)" to="(430,290)"/>
+    <wire from="(430,240)" to="(440,240)"/>
+    <wire from="(430,290)" to="(430,330)"/>
+    <wire from="(430,290)" to="(440,290)"/>
+    <wire from="(430,330)" to="(440,330)"/>
+    <wire from="(480,210)" to="(490,210)"/>
+    <wire from="(480,250)" to="(490,250)"/>
+    <wire from="(480,300)" to="(490,300)"/>
+    <wire from="(480,340)" to="(490,340)"/>
+    <wire from="(490,210)" to="(490,220)"/>
+    <wire from="(490,220)" to="(500,220)"/>
+    <wire from="(490,240)" to="(490,250)"/>
+    <wire from="(490,240)" to="(500,240)"/>
+    <wire from="(490,300)" to="(490,310)"/>
+    <wire from="(490,310)" to="(500,310)"/>
+    <wire from="(490,330)" to="(490,340)"/>
+    <wire from="(490,330)" to="(500,330)"/>
   </circuit>
 </project>
