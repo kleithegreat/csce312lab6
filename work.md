@@ -83,3 +83,16 @@ popq rA | B | 0x4 | 0x4 | 0x4 | rA |
 | popq rA | 1 | 0 | valA | X |
 
 ## pc update
+| instruction | icode | PC update |
+| --- | --- | --- |
+| halt | 0 | 0 |
+| nop | 1 | valP |
+| rrmovq rA, rB | 2 | valP |
+| irmovq V, rB | 3 | valP |
+| rmmovq rA, D(rB) | 4 | valP |
+| mrmovq D(rB), rA | 5 | valP |
+| OPq rA, rB | 6 | valP |
+| jXX Dest | 7 | cnd ? valC : valP |
+| cmovXX rA, rB | 2 | valP |
+| pushq rA | A | valP |
+| popq rA | B | valP |
