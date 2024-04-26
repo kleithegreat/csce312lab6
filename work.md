@@ -96,3 +96,17 @@ popq rA | B | 0x4 | 0x4 | 0x4 | rA |
 | cmovXX rA, rB | 2 | valP |
 | pushq rA | A | valP |
 | popq rA | B | valP |
+
+
+
+
+## new fetch shit
+1: read pc
+2: start reading from memory using pc
+    - initiate counter
+    - disable outside changes to pc
+...
+stop when instruction consumed
+
+new idea: wait 12 cycles before reading new pc
+use pc at first read and a counter
