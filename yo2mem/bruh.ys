@@ -1,4 +1,4 @@
-irmovq $0x80, %rsp
+irmovq $0x0000000000000080, %rsp
 main:
     irmovq $0x1, %rbx
     pushq %rbx
