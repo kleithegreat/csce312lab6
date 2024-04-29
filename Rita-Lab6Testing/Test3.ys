@@ -1,0 +1,15 @@
+# Revised Program 3
+    irmovq $0, %rax          # Load immediate 0 into %rax
+    irmovq $10, %rbx         # Load immediate 10 into %rbx
+
+loop:
+    addq %rbx, %rax          # Increment %rax by %rbx
+    rrmovq %rax, %rcx        # Move %rax to %rcx
+    irmovq $100, %rdx        # Load immediate 100 into %rdx
+
+    cmovl %rbx, %rcx         # If %rax is less, move %rbx to %rcx
+    jge end                 # If %rax is greater or equal to %rdx, jump to .end
+    jmp loop                # Loop back to start of .loop
+
+end:
+    halt                     # Stop the program

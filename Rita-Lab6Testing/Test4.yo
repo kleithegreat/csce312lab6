@@ -1,0 +1,14 @@
+                            | # Program 4
+0x000: 30f00a00000000000000 |     irmovq $10, %rax         # irmovq: Load immediate 10 into %rax
+0x00a: 30f30500000000000000 |     irmovq $5, %rbx          # Load immediate 5 into %rbx
+                            | 
+0x014: 6030                 |     addq %rbx, %rax          # OPq: Add %rbx to %rax
+0x016: 6130                 |     subq %rbx, %rax          # Subtract %rbx from %rax
+0x018: 6230                 |     andq %rbx, %rax          # AND %rbx with %rax
+0x01a: 6330                 |     xorq %rbx, %rax          # XOR %rbx with %rax
+                            | 
+0x01c: 2001                 |     rrmovq %rax, %rcx        # rrmovq: Move %rax to %rcx
+                            | 
+0x01e: 702700000000000000   |     jmp end                 # jXX: Unconditional jump to label .end
+0x027:                      | end:
+0x027: 00                   |     halt                     # halt: Stop the program

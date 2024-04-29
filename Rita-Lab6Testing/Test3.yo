@@ -1,0 +1,15 @@
+                            | # Revised Program 3
+0x000: 30f00000000000000000 |     irmovq $0, %rax          # Load immediate 0 into %rax
+0x00a: 30f30a00000000000000 |     irmovq $10, %rbx         # Load immediate 10 into %rbx
+                            | 
+0x014:                      | loop:
+0x014: 6030                 |     addq %rbx, %rax          # Increment %rax by %rbx
+0x016: 2001                 |     rrmovq %rax, %rcx        # Move %rax to %rcx
+0x018: 30f26400000000000000 |     irmovq $100, %rdx        # Load immediate 100 into %rdx
+                            | 
+0x022: 2231                 |     cmovl %rbx, %rcx         # If %rax is less, move %rbx to %rcx
+0x024: 753600000000000000   |     jge end                 # If %rax is greater or equal to %rdx, jump to .end
+0x02d: 701400000000000000   |     jmp loop                # Loop back to start of .loop
+                            | 
+0x036:                      | end:
+0x036: 00                   |     halt                     # Stop the program
