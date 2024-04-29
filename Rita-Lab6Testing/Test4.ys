@@ -2,7 +2,6 @@
     irmovq $10, %rax         # irmovq: Load immediate 10 into %rax
     irmovq $5, %rbx          # Load immediate 5 into %rbx
 
-    addq %rbx, %rax          # OPq: Add %rbx to %rax
     subq %rbx, %rax          # Subtract %rbx from %rax
     andq %rbx, %rax          # AND %rbx with %rax
     xorq %rbx, %rax          # XOR %rbx with %rax
