@@ -1,0 +1,11 @@
+0x000:                      | .pos 0
+0x000: 30f32a00000000000000 | irmovq $42, %rbx       // Load immediate value 42 into %rbx
+0x00a: 30f07b00000000000000 | irmovq $123, %rax      // Load immediate value 123 into %rax
+0x014: 2001                 | rrmovq %rax, %rcx      // Move value from %rax to %rcx
+0x016: 40030800000000000000 | rmmovq %rax, 8(%rbx)   // Store value from %rax into memory at address (%rbx + 8)
+0x020: 50230800000000000000 | mrmovq 8(%rbx), %rdx   // Load value from memory at address (%rbx + 8) into %rdx
+0x02a: 6012                 | addq %rcx, %rdx        // Add values in %rcx and %rdx, result in %rdx
+0x02c: 6311                 | xorq %rcx, %rcx        // Clear %rcx to set ZF flag (Zero Flag)
+0x02e: 30f60100000000000000 | irmovq $1, %rsi        // Load immediate value 1 into %rsi
+0x038: 6112                 | subq %rcx, %rdx        // Subtract %rcx from %rdx, affects flags for next conditional move
+0x03a: 00                   | halt                   // Halt the program
