@@ -1,0 +1,33 @@
+# Assume the base addresses and size of the arrays are known
+# baseArray1 at 0x100, baseArray2 at 0x200, size in element count (e.g., 10 elements)
+
+    irmovq $0x100, %r8      # Base address of array1
+    irmovq $0x200, %r9      # Base address of array2
+    irmovq $10, %rcx        # Number of elements in each array
+    irmovq $0, %rax         # Result register, initially set to 0 (indicates arrays are the same)
+    irmovq $8, %rdx         # Step to next element (size of each element)
+    irmovq $1, %rbx         # Store constant 1 in %rbx for use in decrementing %rcx
+
+# Compare loop
+compare_loop:
+    mrmovq (%r8), %r10      # Load element from array1 into %r10
+    mrmovq (%r9), %r11      # Load element from array2 into %r11
+    xorq %r11, %r10         # XOR elements; result is 0 if elements are the same
+    jne not_equal           # If result is not zero, elements are not the same
+
+    addq %rdx, %r8          # Increment pointer to next element in array1
+    addq %rdx, %r9          # Increment pointer to next element in array2
+    subq %rbx, %rcx         # Decrement the loop counter
+    jne compare_loop        # If not done, loop again
+
+    jmp end                 # Jump to end, arrays are identical
+
+# Not equal label
+not_equal:
+    irmovq $1, %rax         # Set result register to 1 (arrays are different)
+
+# End label
+end:
+    halt                    # Halt the program
+
+# The value in %rax indicates the result: 0 if arrays are the same, 1 if different.

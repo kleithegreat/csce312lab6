@@ -1,0 +1,26 @@
+# Assume matrix1, matrix2, and result_matrix are in memory, each matrix has 9 elements (3x3)
+# Assume the base addresses for these matrices are as follows:
+# matrix1 at 0x100, matrix2 at 0x200, result_matrix at 0x300
+
+    irmovq $0x100, %r8     # Base address of matrix1
+    irmovq $0x200, %r9     # Base address of matrix2
+    irmovq $0x300, %r10    # Base address of result_matrix
+    irmovq $9, %rcx        # Counter for 9 elements
+
+# Loop start
+loop:
+    mrmovq (%r8), %rax     # Load element from matrix1
+    mrmovq (%r9), %rbx     # Load element from matrix2
+    addq %rbx, %rax        # Add element from matrix2 to matrix1
+    rmmovq %rax, (%r10)    # Store result in result_matrix
+
+    irmovq $8, %rdx        # Prepare to increment address by 8 bytes (size of qword)
+    addq %rdx, %r8         # Move to the next element in matrix1
+    addq %rdx, %r9         # Move to the next element in matrix2
+    addq %rdx, %r10        # Move to the next element in result_matrix
+
+    subq %rdx, %rcx        # Decrement loop counter
+    jne loop               # If counter is not zero, continue loop
+
+# End of program (halt)
+    halt

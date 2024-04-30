@@ -1,0 +1,16 @@
+#Function to find the maximum of two numbers
+# Input: %rdi (first number), %rsi (second number)
+find_max:
+    pushq %rdi         # Push the value of %rdi onto the stack
+    pushq %rsi         # Push the value of %rsi onto the stack
+
+    popq %rax          # Pop the top value of the stack into %rax (second number, %rsi)
+    popq %rbx          # Pop the next top value of the stack into %rbx (first number, %rdi)
+
+    subq %rax, %rbx     # Subtract %rbx from %rax (%rsi - %rdi)
+    jge first_larger    # If result is non-negative (%rsi >= %rdi), %rsi is larger or they are equal
+
+    movq %rax, %rbx     # If result is negative (%rsi < %rdi), move %rbx (%rdi) to %rax
+
+first_larger:
+    ret              # Return from the function, result in %rax (larger number or equal)

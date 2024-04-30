@@ -1,0 +1,26 @@
+                            | # Assume matrix1, matrix2, and result_matrix are in memory, each matrix has 9 elements (3x3)
+                            | # Assume the base addresses for these matrices are as follows:
+                            | # matrix1 at 0x100, matrix2 at 0x200, result_matrix at 0x300
+                            | 
+0x000: 30f80001000000000000 |     irmovq $0x100, %r8     # Base address of matrix1
+0x00a: 30f90002000000000000 |     irmovq $0x200, %r9     # Base address of matrix2
+0x014: 30fa0003000000000000 |     irmovq $0x300, %r10    # Base address of result_matrix
+0x01e: 30f10900000000000000 |     irmovq $9, %rcx        # Counter for 9 elements
+                            | 
+                            | # Loop start
+0x028:                      | loop:
+0x028: 50080000000000000000 |     mrmovq (%r8), %rax     # Load element from matrix1
+0x032: 50390000000000000000 |     mrmovq (%r9), %rbx     # Load element from matrix2
+0x03c: 6030                 |     addq %rbx, %rax        # Add element from matrix2 to matrix1
+0x03e: 400a0000000000000000 |     rmmovq %rax, (%r10)    # Store result in result_matrix
+                            | 
+0x048: 30f20800000000000000 |     irmovq $8, %rdx        # Prepare to increment address by 8 bytes (size of qword)
+0x052: 6028                 |     addq %rdx, %r8         # Move to the next element in matrix1
+0x054: 6029                 |     addq %rdx, %r9         # Move to the next element in matrix2
+0x056: 602a                 |     addq %rdx, %r10        # Move to the next element in result_matrix
+                            | 
+0x058: 6121                 |     subq %rdx, %rcx        # Decrement loop counter
+0x05a: 742800000000000000   |     jne loop               # If counter is not zero, continue loop
+                            | 
+                            | # End of program (halt)
+0x063: 00                   |     halt
