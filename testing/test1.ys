@@ -1,0 +1,18 @@
+.pos 0
+    irmovq $100, %rsp
+    irmovq $0xabc, %rax
+    pushq %rax
+    irmovq $0xdef, %rax
+    pushq %rax
+    irmovq $0xabcdeff, %rax
+    popq %rcx
+    popq %rdx
+    rmmovq %rcx, 0x10
+    mrmovq 0x10, %rdi
+    jmp newpos
+    nop
+    nop
+    rrmovq %rdi, %r11
+newpos:
+    rrmovq %rdi, %r12
+    halt

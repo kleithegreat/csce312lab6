@@ -1,13 +1,29 @@
-# Program 4
-    irmovq $10, %rax         # irmovq: Load immediate 10 into %rax
-    irmovq $5, %rbx          # Load immediate 5 into %rbx
+    # Initialize registers
+    irmovq $10, %rax         # Load immediate 10 into %rax
+    rmmovq %rax, 100(%rsp)   # Store %rax at memory address 100(%rsp)
+    irmovq $5, %rdx          # Load immediate 5 into %rdx
 
-    subq %rbx, %rax          # Subtract %rbx from %rax
-    andq %rbx, %rax          # AND %rbx with %rax
-    xorq %rbx, %rax          # XOR %rbx with %rax
+    # Use memory and stack operations
+    mrmovq 100(%rsp), %rbx   # Load %rbx from memory address 100(%rsp)
+    pushq %rax               # Push %rax onto the stack
+    pushq %rdx               # Push %rdx onto the stack as well
 
-    rrmovq %rax, %rcx        # rrmovq: Move %rax to %rcx
+    # Perform arithmetic on the stack's top values
+    popq %rcx                # Pop the top of the stack into %rcx (was %rdx)
+    popq %rsi                # Pop the next top of the stack into %rsi (was %rax)
+    addq %rsi, %rcx          # Add %rsi to %rcx, store the result in %rcx
+    rrmovq %rcx, %rbx        # Move result back into %rbx for further use
 
-    jmp end                 # jXX: Unconditional jump to label .end
-end:
-    halt                     # halt: Stop the program
+    # More stack manipulations
+    pushq %rbx               # Push the result back onto the stack
+    pushq %rcx               # Push %rcx onto the stack again
+
+    # Double the value at the top of the stack
+    popq %rdi                # Pop the top of the stack into %rdi
+    addq %rdi, %rdi          # Double the value in %rdi
+    pushq %rdi               # Push the doubled value back onto the stack
+
+    # Clean up and repeat operations
+    popq %rbx                # Clean up the stack, pop into %rbx
+    nop                      # No operation
+    halt                     # Stop the program

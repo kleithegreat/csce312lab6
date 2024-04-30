@@ -1,14 +1,18 @@
-# Revised Program 3
     irmovq $0, %rax          # Load immediate 0 into %rax
     irmovq $10, %rbx         # Load immediate 10 into %rbx
+    irmovq $1, %rcx          # Load immediate 1 into %rcx (loop counter)
 
-.loop:                       # Define loop start before using it
+loop:
     addq %rbx, %rax          # Increment %rax by %rbx
-    rrmovq %rax, %rcx        # Move %rax to %rcx
-    irmovq $100, %rdx        # Load immediate 100 into %rdx
+    rrmovq %rax, %rdx        # Move %rax to %rdx
 
-    jge .end                 # If %rax is greater or equal to %rdx, jump to .end
-    jmp .loop                # Loop back to start of .loop
+    irmovq $1, %rsi          # Load immediate 1 into %rsi
+    subq %rsi, %rcx          # Decrement %rcx by 1
+    irmovq $0, %rsi          # Reset %rsi to 0 for comparison
 
-.end:                        # Define end before it's referenced
+    # Use register value directly to control the loop: simple decrement and stop condition
+    rrmovq %rcx, %rsi        # Copy %rcx to %rsi
+    jne loop                 # Continue loop if %rcx is not equal to %rsi (i.e., not zero)
+
+end:
     halt                     # Stop the program

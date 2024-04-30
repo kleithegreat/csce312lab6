@@ -1,0 +1,18 @@
+0x000:                      | .pos 0
+0x000: 30f46400000000000000 |     irmovq $100, %rsp
+0x00a: 30f0bc0a000000000000 |     irmovq $0xabc, %rax
+0x014: a00f                 |     pushq %rax
+0x016: 30f0ef0d000000000000 |     irmovq $0xdef, %rax
+0x020: a00f                 |     pushq %rax
+0x022: 30f0ffdebc0a00000000 |     irmovq $0xabcdeff, %rax
+0x02c: b01f                 |     popq %rcx
+0x02e: b02f                 |     popq %rdx
+0x030: 401f1000000000000000 |     rmmovq %rcx, 0x10
+0x03a: 507f1000000000000000 |     mrmovq 0x10, %rdi
+0x044: 705100000000000000   |     jmp newpos
+0x04d: 10                   |     nop
+0x04e: 10                   |     nop
+0x04f: 207b                 |     rrmovq %rdi, %r11
+0x051:                      | newpos:
+0x051: 207c                 |     rrmovq %rdi, %r12
+0x053: 00                   |     halt
