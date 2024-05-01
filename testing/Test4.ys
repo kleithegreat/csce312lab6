@@ -1,29 +1,31 @@
-    # Initialize registers
-    irmovq $10, %rax         # Load immediate 10 into %rax
-    rmmovq %rax, 100(%rsp)   # Store %rax at memory address 100(%rsp)
-    irmovq $5, %rdx          # Load immediate 5 into %rdx
+# Initialize stack pointer
+irmovq $0x200, %rsp    
 
-    # Use memory and stack operations
-    mrmovq 100(%rsp), %rbx   # Load %rbx from memory address 100(%rsp)
-    pushq %rax               # Push %rax onto the stack
-    pushq %rdx               # Push %rdx onto the stack as well
+# Initialize registers
+irmovq $10, %rax       # Load immediate 10 into %rax
+rmmovq %rax, 8(%rsp)  # Store %rax at memory address 8(%rsp)
+irmovq $5, %rdx        # Load immediate 5 into %rdx
 
-    # Perform arithmetic on the stack's top values
-    popq %rcx                # Pop the top of the stack into %rcx (was %rdx)
-    popq %rsi                # Pop the next top of the stack into %rsi (was %rax)
-    addq %rsi, %rcx          # Add %rsi to %rcx, store the result in %rcx
-    rrmovq %rcx, %rbx        # Move result back into %rbx for further use
+# Use memory and stack operations
+mrmovq 8(%rsp), %rbx  # Load %rbx from memory address 8(%rsp)
+pushq %rax             # Push %rax onto the stack
+pushq %rdx             # Push %rdx onto the stack as well
 
-    # More stack manipulations
-    pushq %rbx               # Push the result back onto the stack
-    pushq %rcx               # Push %rcx onto the stack again
+# Perform arithmetic on the stack's top values
+popq %rcx              # Pop the top of the stack into %rcx (was %rdx)
+popq %rsi              # Pop the next top of the stack into %rsi (was %rax)
+addq %rsi, %rcx        # Add %rsi to %rcx, store the result in %rcx
+rrmovq %rcx, %rbx      # Move result back into %rbx for further use
 
-    # Double the value at the top of the stack
-    popq %rdi                # Pop the top of the stack into %rdi
-    addq %rdi, %rdi          # Double the value in %rdi
-    pushq %rdi               # Push the doubled value back onto the stack
+# More stack manipulations
+pushq %rbx             # Push the result back onto the stack
+pushq %rcx             # Push %rcx onto the stack again
 
-    # Clean up and repeat operations
-    popq %rbx                # Clean up the stack, pop into %rbx
-    nop                      # No operation
-    halt                     # Stop the program
+# Double the value at the top of the stack
+popq %rdi              # Pop the top of the stack into %rdi
+addq %rdi, %rdi        # Double the value in %rdi
+pushq %rdi             # Push the doubled value back onto the stack
+
+# Clean up and repeat operations
+nop                    # No operation
+halt                   # Stop the program

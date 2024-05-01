@@ -61,7 +61,7 @@
     <a name="appearance" val="logisim_evolution"/>
     <a name="circuit" val="main"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
-    <a name="simulationFrequency" val="2000.0"/>
+    <a name="simulationFrequency" val="8.0"/>
     <comp lib="0" loc="(120,230)" name="Constant">
       <a name="value" val="0x0"/>
       <a name="width" val="12"/>

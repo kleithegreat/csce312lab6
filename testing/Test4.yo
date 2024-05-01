@@ -1,29 +1,31 @@
-                            |     # Initialize registers
-0x000: 30f00a00000000000000 |     irmovq $10, %rax         # Load immediate 10 into %rax
-0x00a: 40046400000000000000 |     rmmovq %rax, 100(%rsp)   # Store %rax at memory address 100(%rsp)
-0x014: 30f20500000000000000 |     irmovq $5, %rdx          # Load immediate 5 into %rdx
+                            | # Initialize stack pointer
+0x000: 30f40002000000000000 | irmovq $0x200, %rsp    
                             | 
-                            |     # Use memory and stack operations
-0x01e: 50346400000000000000 |     mrmovq 100(%rsp), %rbx   # Load %rbx from memory address 100(%rsp)
-0x028: a00f                 |     pushq %rax               # Push %rax onto the stack
-0x02a: a02f                 |     pushq %rdx               # Push %rdx onto the stack as well
+                            | # Initialize registers
+0x00a: 30f00a00000000000000 | irmovq $10, %rax       # Load immediate 10 into %rax
+0x014: 40040800000000000000 | rmmovq %rax, 8(%rsp)  # Store %rax at memory address -8(%rsp)
+0x01e: 30f20500000000000000 | irmovq $5, %rdx        # Load immediate 5 into %rdx
                             | 
-                            |     # Perform arithmetic on the stack's top values
-0x02c: b01f                 |     popq %rcx                # Pop the top of the stack into %rcx (was %rdx)
-0x02e: b06f                 |     popq %rsi                # Pop the next top of the stack into %rsi (was %rax)
-0x030: 6061                 |     addq %rsi, %rcx          # Add %rsi to %rcx, store the result in %rcx
-0x032: 2013                 |     rrmovq %rcx, %rbx        # Move result back into %rbx for further use
+                            | # Use memory and stack operations
+0x028: 50340800000000000000 | mrmovq 8(%rsp), %rbx  # Load %rbx from memory address -8(%rsp)
+0x032: a00f                 | pushq %rax             # Push %rax onto the stack
+0x034: a02f                 | pushq %rdx             # Push %rdx onto the stack as well
                             | 
-                            |     # More stack manipulations
-0x034: a03f                 |     pushq %rbx               # Push the result back onto the stack
-0x036: a01f                 |     pushq %rcx               # Push %rcx onto the stack again
+                            | # Perform arithmetic on the stack's top values
+0x036: b01f                 | popq %rcx              # Pop the top of the stack into %rcx (was %rdx)
+0x038: b06f                 | popq %rsi              # Pop the next top of the stack into %rsi (was %rax)
+0x03a: 6061                 | addq %rsi, %rcx        # Add %rsi to %rcx, store the result in %rcx
+0x03c: 2013                 | rrmovq %rcx, %rbx      # Move result back into %rbx for further use
                             | 
-                            |     # Double the value at the top of the stack
-0x038: b07f                 |     popq %rdi                # Pop the top of the stack into %rdi
-0x03a: 6077                 |     addq %rdi, %rdi          # Double the value in %rdi
-0x03c: a07f                 |     pushq %rdi               # Push the doubled value back onto the stack
+                            | # More stack manipulations
+0x03e: a03f                 | pushq %rbx             # Push the result back onto the stack
+0x040: a01f                 | pushq %rcx             # Push %rcx onto the stack again
                             | 
-                            |     # Clean up and repeat operations
-0x03e: b03f                 |     popq %rbx                # Clean up the stack, pop into %rbx
-0x040: 10                   |     nop                      # No operation
-0x041: 00                   |     halt                     # Stop the program
+                            | # Double the value at the top of the stack
+0x042: b07f                 | popq %rdi              # Pop the top of the stack into %rdi
+0x044: 6077                 | addq %rdi, %rdi        # Double the value in %rdi
+0x046: a07f                 | pushq %rdi             # Push the doubled value back onto the stack
+                            | 
+                            | # Clean up and repeat operations
+0x048: 10                   | nop                    # No operation
+0x049: 00                   | halt                   # Stop the program
