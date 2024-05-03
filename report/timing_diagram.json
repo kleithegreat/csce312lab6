@@ -1,0 +1,14 @@
+{signal: [
+    {name: 'clk', wave: 'lp...............'},  
+    {name: 'icode', wave: 'x=...............', data: ['icode']},
+    {name: 'ifun', wave: 'x=...............', data: ['ifun']},
+    {name: 'rA', wave: 'x.=..............', data: ['rA']},
+    {name: 'rB', wave: 'x.=..............', data: ['rB']},
+    {name: 'valC', wave: 'x..........=.....', data: ['valC']},
+    {name: 'valP', wave: 'x.=..............', data: ['valP']},
+    {name: 'valA', wave: 'x.=..............', data: ['valA']},
+    {name: 'valB', wave: 'x.=..............', data: ['valB']},
+    {name: 'valE', wave: 'x...........=....', data: ['valE']},
+    {name: 'valM', wave: 'x............=...', data: ['valM']},
+    {name: 'new PC', wave: 'x.=..............', data: ['new PC']},
+  ]}
