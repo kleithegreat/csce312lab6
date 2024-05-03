@@ -1,0 +1,23 @@
+    irmovq $0, %rax          # Load immediate 0 into %rax
+    irmovq $10, %rbx         # Load immediate 10 into %rbx
+    irmovq $1, %rcx          # Load immediate 1 into %rcx (loop counter)
+    jmp loop
+
+label:
+    irmovq $20, %rdi
+    jmp end
+
+loop:
+    addq %rbx, %rax          # Increment %rax by %rbx
+    rrmovq %rax, %rdx        # Move %rax to %rdx
+
+    irmovq $1, %rsi          # Load immediate 1 into %rsi
+    subq %rsi, %rcx          # Decrement %rcx by 1
+    irmovq $0, %rsi          # Reset %rsi to 0 for comparison
+
+    # Use register value directly to control the loop: simple decrement and stop condition
+    rrmovq %rcx, %rsi        # Copy %rcx to %rsi
+    je label                 # Continue loop if %rcx is not equal to %rsi (i.e., not zero)
+
+end:
+    halt                     # Stop the program

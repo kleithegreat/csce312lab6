@@ -1,0 +1,23 @@
+0x000: 30f00000000000000000 |     irmovq $0, %rax          # Load immediate 0 into %rax
+0x00a: 30f30a00000000000000 |     irmovq $10, %rbx         # Load immediate 10 into %rbx
+0x014: 30f10100000000000000 |     irmovq $1, %rcx          # Load immediate 1 into %rcx (loop counter)
+0x01e: 703a00000000000000   |     jmp loop
+                            | 
+0x027:                      | label:
+0x027: 30f71400000000000000 |     irmovq $20, %rdi
+0x031: 705f00000000000000   |     jmp end
+                            | 
+0x03a:                      | loop:
+0x03a: 6030                 |     addq %rbx, %rax          # Increment %rax by %rbx
+0x03c: 2002                 |     rrmovq %rax, %rdx        # Move %rax to %rdx
+                            | 
+0x03e: 30f60100000000000000 |     irmovq $1, %rsi          # Load immediate 1 into %rsi
+0x048: 6161                 |     subq %rsi, %rcx          # Decrement %rcx by 1
+0x04a: 30f60000000000000000 |     irmovq $0, %rsi          # Reset %rsi to 0 for comparison
+                            | 
+                            |     # Use register value directly to control the loop: simple decrement and stop condition
+0x054: 2016                 |     rrmovq %rcx, %rsi        # Copy %rcx to %rsi
+0x056: 732700000000000000   |     je label                 # Continue loop if %rcx is not equal to %rsi (i.e., not zero)
+                            | 
+0x05f:                      | end:
+0x05f: 00                   |     halt                     # Stop the program

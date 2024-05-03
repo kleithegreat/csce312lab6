@@ -46,27 +46,6 @@
 \definecolor{ctp-macchiato-mantle}{HTML}{1e2030}
 \definecolor{ctp-macchiato-crust}{HTML}{181926}
 
-\lstset{
-    basicstyle=\ttfamily\color{ctp-macchiato-text},
-    backgroundcolor=\color{ctp-macchiato-base},
-    commentstyle=\color{ctp-macchiato-surface1},
-    keywordstyle=\color{ctp-macchiato-mauve},
-    stringstyle=\color{ctp-macchiato-green},
-    identifierstyle=\color{ctp-macchiato-blue},
-    frame=single,
-    rulecolor=\color{ctp-macchiato-base},
-    breaklines=true,
-    breakatwhitespace=true,
-    breakautoindent=true,
-    showspaces=false,
-    showstringspaces=false,
-    showtabs=false,
-    tabsize=4,
-    captionpos=b,
-    belowskip=1em,
-    belowcaptionskip=2em
-}
-
 \lstdefinelanguage{myassembly}{
     basicstyle=\ttfamily\color{ctp-macchiato-text},
     backgroundcolor=\color{ctp-macchiato-base},
@@ -94,6 +73,10 @@
     upquote=true,
 }
 
+\lstset{
+    basicstyle=\fontsize{8}{12}\ttfamily
+}
+
 \geometry{a4paper, margin=1in}
 
 \title{CSCE 312 Lab 6 - Term Project}
@@ -106,8 +89,10 @@
 \maketitle
 
 \section{Y86 Instruction Set Architecture}
-The circuit for the Y86 Instruction Set Architecture was implemented through Logisim. 
-The circuit has five main subcircuits: the Fetch stage, the Decode and Write Back stage, the Execute stage, the Memory stage, and the PC Update stage.
+The circuit for the Y86 Instruction Set Architecture (ISA) was implemented through Logisim. 
+The circuit has five main sub-circuits: the Fetch stage, the Decode and Write Back stage, the Execute stage, the Memory stage, and the Program Counter (PC) Update stage. 
+In the main circuit, on every clock cycle we check if \lstinline{icode} and \lstinline{ifun} are 0.
+If they are 0, the program will halt and finish executing. 
 
 \begin{figure}[H]
     \centering
@@ -129,22 +114,23 @@ The circuit has five main subcircuits: the Fetch stage, the Decode and Write Bac
 
 \subsection{Fetch Stage}
 In the Fetch stage, the instruction memory is implemented. 
-The Fetch stage reads 10 bytes from memory at a time and the address of the first byte is stored in the PC (program counter). 
-Then the stage produces meaningful data and control signals from the instruction for later stages. 
-The Split module divides instruction byte into icode and ifun. 
-The Align module gets fields for rA (register A), rB (register B), and valC. 
-valC is the value constant which represents the immediate data that may be used for certain instructions (loading into a register or calculating in an arithmetic operation). 
+The Fetch stage can read up to 10 bytes from memory for one instruction and the address of the first byte is given by the PC (program counter). 
+Subsequently, this stage generates meaningful data and control signals from the instruction for subsequent processing stages. 
+Byte 0 from the instruction memory is always the \lstinline{icode} and \lstinline{ifun} values.
+Depending on \lstinline{icode}, the \lstinline{rA} and \lstinline{rB} values are selected from either byte 1 or byte 2.
+Likewise, the \lstinline{valC} value is selected from bytes 2 to 9 or 1 to 8, depending on the instruction.
+Finally, \lstinline{valP} is set to the next instruction address, which is the current PC value plus the length of the instruction.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./images/fetch.png}
+    \includegraphics[width=\textwidth]{./images/fetch.png}
     \caption{Fetch stage}
 \end{figure}
 
-Within the instruction memory, a 4kx8 RAM is used to read the instruction memory. 
+Within the instruction memory, a 4k $\times$ 8 RAM is used to read the instruction memory. 
 The total size is 4KB because of the 12-bit address width and the 8-bit of data bit width that are both read. 
 The value from the RAM is then broken up into 10 different register files, each register file representing a byte of the instruction memory line. 
-A counter is set up to make sure that each line of the instruction memory is read. 
+A counter is set up to make sure that each line of the instruction is read.
 
 \begin{figure}[H]
     \centering
@@ -156,12 +142,12 @@ A counter is set up to make sure that each line of the instruction memory is rea
 
 Data is read from register files in the decode stage. 
 The register file has two ports for reads. 
-One being srcA and the other being represented as srcB. 
-dstE, dstM are the outputs and are the write port addresses. 
-Register ids are selected by the instruction code (icode). 
-If the fetched instruction does not have to read/write register, a default value of 0xF is selected. 
-The module also takes into account the Cnd value which indicates whether or not a conditional move is needed. 
-The Cnd value is computed from the Execute stage.
+One being \lstinline{srcA} and the other being represented as \lstinline{srcB}. 
+The outputs, write port addresses, are \lstinline{dstE} and \lstinline{dstM}. 
+Register IDs are selected by \lstinline{icode}.
+If the fetched instruction does not have to read/write register, a default value of \lstinline{0xF} is selected. 
+The module also takes into account the condition value (\lstinline{cnd}) which indicates whether or not a conditional move is needed. 
+The cnd value is computed from the Execute stage. 
 
 \begin{figure}[H]
     \centering
@@ -169,7 +155,9 @@ The Cnd value is computed from the Execute stage.
     \caption{Decode and Write Back stage}
 \end{figure}
 
-Within the Decode and Write Back stage, a register file component is implemented to read and write data from the 15 registers.
+Within the Decode and Write Back stage, a register file component is implemented to update the registers when needed. 
+A 4x16 write decoder is used to load either \lstinline{valA} or \lstinline{valE} into a specific register, depending on \lstinline{dstM} and \lstinline{dstE}. 
+Simairly, a 4x16 read decoder is used to decide whether to load either \lstinline{valA} or \lstinline{valB} into a specific register, depending on \lstinline{srcA} and \lstinline{srcB}.  
 
 \begin{figure}[H]
     \centering
@@ -182,8 +170,8 @@ Within the Decode and Write Back stage, a register file component is implemented
 The Execution stage mainly surrounds the Arithmetic Logic Unit (ALU) performing the four operations (addq, subq, andq, and xorq). 
 A condition code is also calculated in a form of (Zero Flag/Sign Flag/Overflow Flag). 
 The Condition Code (CC) module lets the CC store the last condition code. 
-The SetCC module generates a signal to store CC. It is set if the icode is 6 (OPq). 
-The signal of Cond is used by jXX in NewPC, cmovXX in Write Back stage. 
+The SetCC module generates a signal to store CC. It is set if the icode is 6 (\lstinline{OPq}). 
+The signal of Cond is used by \lstinline{jXX} in NewPC, \lstinline{cmovXX} in Write Back stage. 
 ALU\_fun determines the operation that must be operated by the ALU. 
 ALU\_A and ALU\_B compute the inputs for the ALU. 
 
@@ -199,8 +187,8 @@ ALU\_A and ALU\_B compute the inputs for the ALU.
     \caption{Set Condition Code module}
 \end{figure}
 
-As mentioned above, ALU\_A and ALU\_B both determine the inputs of the ALU depending on the instruction code given. 
-For example, the instruction code (icode) determines if ALU\_A's output will be either valA, valC, 8 or -8 through a 16x1 multiplexer. 
+As mentioned above, ALU\_A and ALU\_B both determine the inputs of the ALU depending on the instruction code given.
+For example, the instruction code (\lstinline{icode}) determines if ALU\_A's output will be either \lstinline{valA}, \lstinline{valC}, 8 or -8 through a 16x1 multiplexer. 
 
 \begin{figure}[H]
     \centering
@@ -208,7 +196,7 @@ For example, the instruction code (icode) determines if ALU\_A's output will be 
     \caption{ALU\_A module}
 \end{figure}
 
-Likewise, the output for ALU\_B was derived from a 16x1 multiplexer that chose from either 0 or valB, depending on the instruction code. 
+Likewise, the output for ALU\_B was derived from a 16x1 multiplexer that chose from either 0 or \lstinline{valB}, depending on the instruction code. 
 
 \begin{figure}[H]
     \centering
@@ -216,12 +204,20 @@ Likewise, the output for ALU\_B was derived from a 16x1 multiplexer that chose f
     \caption{ALU\_B module}
 \end{figure}
 
-To find out which function the ALU has to perform, a 16x1 multiplexer uses the instruction code to choose between 0 (addition) or other functions determined by ifun (the instruction function).  
+To find out which function the ALU has to perform, a 16x1 multiplexer uses the instruction code to choose between 0 (addition) or other functions determined by \lstinline{ifun} (the instruction function).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{./images/alu_fun.png}
     \caption{ALU\_fun module}
+\end{figure}
+
+The condition code (CC) module stores the last condition calculated through a register that has its write enable on depending if the setCC output.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/cc.png}
+    \caption{Condition Code module}
 \end{figure}
 
 The condition module sets the condition flag off (cnd) depending on the condition code found by the ALU and the instruction function being read. 
@@ -257,14 +253,14 @@ Mem.addr selects the address and Mem.data selects the data.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./images/memory.png}
+    \includegraphics[width=0.7\textwidth]{./images/memory.png}
     \caption{Memory stage}
 \end{figure}
 
 \subsection{PC Update Stage}
 
 The PC Update stage sets a new value for the program counter (PC). 
-This new value is computed through a 16x1 multiplexer that is based on the instruction code. 
+This new value is computed through a 16x1 multiplexer that selects based on the instruction code. 
 The multiplexer determines the current PC value and the result of certain operations or conditions within the processor. 
 A special case is for instruction code 7 (any jump function) which uses a 2x1 multiplexer to determine the new PC between valC or valP, depending if the condition flag is on. 
 
@@ -284,11 +280,44 @@ The following is a timing diagram for the Y86 ISA implementation.
     \caption{Timing diagram for the Y86 ISA implementation}
 \end{figure}
 
+\lstset{
+    basicstyle=\fontsize{8}{12}\ttfamily\color{ctp-macchiato-text},
+    backgroundcolor=\color{ctp-macchiato-base},
+    commentstyle=\color{ctp-macchiato-surface1},
+    keywordstyle=\color{ctp-macchiato-mauve},
+    stringstyle=\color{ctp-macchiato-green},
+    identifierstyle=\color{ctp-macchiato-blue},
+    frame=single,
+    rulecolor=\color{ctp-macchiato-base},
+    breaklines=true,
+    breakatwhitespace=true,
+    breakautoindent=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    captionpos=b,
+    belowskip=1em,
+    belowcaptionskip=2em
+}
+
+\newpage
+
 \section{Testing}
 
 The following programs were used to test the correctness of the Y86 ISA implementation.
 
 \subsection{Program 1}
+
+This program initializes \%rsp to 100 and \%rax to 0xabc. 
+Then \%rax is pushed onto the stack. 
+Then \%rax is set with a new value 0xdef which is then pushed onto the stack. 
+\%rax is set to 0xabcdeff. The top of the stack is popped into \%rcx. 
+Similairly, the top of the stack is popped into \%rdx. 
+The memory address 0x10 holds the value of \%rcx. 
+Then that value is loaded into \%rdi. 
+Then the pointer jumps to the section, newpos. 
+Here, the value of \%rdi is moved to \%r12. 
 
 \begin{lstlisting}[language=myassembly]
     .pos 0
@@ -334,7 +363,7 @@ The expected output is:
 
 The final values of the registers and memory are as follows:
 
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.3\textwidth}
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.5\textwidth]{./images/test1_reg1.png}
@@ -344,18 +373,24 @@ The final values of the registers and memory are as follows:
 \begin{minipage}{0.5\textwidth}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{./images/test1_reg2.png}
+        \includegraphics[width=0.3\textwidth]{./images/test1_reg2.png}
         \caption{Final register values for Program 1}
     \end{figure}
 \end{minipage}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{./images/test1_mem.png}
-    \caption{Final memory values for Program 1}
-\end{figure}
+\begin{minipage}{0.3\textwidth}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{./images/test1_mem.png}
+        \caption{Final memory values for Program 1}
+    \end{figure}
+\end{minipage}
 
 \subsection{Program 2}
+
+\%rax is set to 0. \%rbx is set to 10. 
+\%rcx is set to 1. 
+Then, a loop runs until \%rcx decrements to 0. 
+Then \%rdi is set to 20. 
 
 \begin{lstlisting}[language=myassembly]
     irmovq $0, %rax          # Load immediate 0 into %rax
@@ -411,6 +446,19 @@ The final values of the registers are as follows:
 \end{figure}
 
 \subsection{Program 3}
+
+\%rsp (the stack pointer) is set to 0x200 . 
+\%rax is set to 10. 
+\%rax is stored to memory using \%rsp as the base. 
+\%rdx is set to 5. The value from memory is loaded into \%rbx. 
+\%rax and \%rdx is pushed onto the stack. 
+The top of the stack is popped into \%rcx. 
+The same is done to \%rsi. 
+\%rcx increments by the value of \%rsi. 
+\%rcx is moved to \%rbx. 
+\%rbx and \%rcx are pushed onto the stack. 
+The top of the stack is popped to \%rdi. 
+The value in \%rdi is doubled then pushed to the stack. 
 
 \begin{lstlisting}[language=myassembly]
     # Initialize stack pointer
@@ -483,6 +531,5 @@ The final values of the registers and memory are as follows:
         \caption{Final memory values for Program 3}
     \end{figure}
 \end{minipage}
-
 
 \end{document}
